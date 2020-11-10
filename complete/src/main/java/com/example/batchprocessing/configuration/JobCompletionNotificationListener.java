@@ -1,16 +1,17 @@
-package com.example.batchprocessing;
+package com.example.batchprocessing.configuration;
 
+import com.example.batchprocessing.domain.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.listener.JobExecutionListenerSupport;
+import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JobCompletionNotificationListener extends JobExecutionListenerSupport {
+public class JobCompletionNotificationListener implements JobExecutionListener {
 
 	private static final Logger log = LoggerFactory.getLogger(JobCompletionNotificationListener.class);
 
@@ -19,6 +20,11 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
 	@Autowired
 	public JobCompletionNotificationListener(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
+	}
+
+	@Override
+	public void beforeJob(JobExecution jobExecution) {
+
 	}
 
 	@Override

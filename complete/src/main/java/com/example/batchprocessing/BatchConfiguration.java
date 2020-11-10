@@ -1,9 +1,9 @@
 package com.example.batchprocessing;
 
-import javax.sql.DataSource;
-
+import com.example.batchprocessing.configuration.JobCompletionNotificationListener;
+import com.example.batchprocessing.domain.Person;
+import com.example.batchprocessing.job.PersonItemProcessor;
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -15,15 +15,13 @@ import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilde
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
-import org.springframework.batch.item.file.mapping.DefaultLineMapper;
-import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.core.JdbcTemplate;
 
-// tag::setup[]
+import javax.sql.DataSource;
+
 @Configuration
 @EnableBatchProcessing
 public class BatchConfiguration {
@@ -33,9 +31,7 @@ public class BatchConfiguration {
 
 	@Autowired
 	public StepBuilderFactory stepBuilderFactory;
-	// end::setup[]
 
-	// tag::readerwriterprocessor[]
 	@Bean
 	public FlatFileItemReader<Person> reader() {
 		return new FlatFileItemReaderBuilder<Person>()
@@ -62,9 +58,7 @@ public class BatchConfiguration {
 			.dataSource(dataSource)
 			.build();
 	}
-	// end::readerwriterprocessor[]
 
-	// tag::jobstep[]
 	@Bean
 	public Job importUserJob(JobCompletionNotificationListener listener, Step step1) {
 		return jobBuilderFactory.get("importUserJob")
@@ -84,5 +78,4 @@ public class BatchConfiguration {
 			.writer(writer)
 			.build();
 	}
-	// end::jobstep[]
 }
